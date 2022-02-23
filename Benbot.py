@@ -1,6 +1,6 @@
 import telebot
 from config import keys, TOKEN
-from extensions import ConvertException, ValutConverter
+from extensions import APIEException, ValutConverter
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -24,13 +24,13 @@ def convert(message: telebot.types.Message):
         values = message.text.split(" ")
 
         if len(values) != 3:
-            raise ConvertException("Должно быть три параметра")
+            raise APIEException("Должно быть три параметра")
 
         quote, base, amount = values
 
         total_base = ValutConverter.get_price(quote, base, amount)
 
-    except ConvertException as e:
+    except APIEException as e:
         bot.reply_to(message, f"Ошибка пользователя\n{e}")
     except  Exception as e:
         bot.reply_to(message, f"Не удалось обработать команду\n{e}")
